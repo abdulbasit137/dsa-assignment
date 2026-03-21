@@ -61,23 +61,79 @@ void reverseList() {
     first = prev;
 }
 
+void removeDuplicates() {
+    Node *p = first;
+
+    while (p != NULL) {
+        Node *q = p;
+        while (q->next != NULL) {
+            if (p->data == q->next->data) {
+                Node *dup = q->next;
+                q->next = dup->next;
+                delete dup;
+            } else {
+                q = q->next;
+            }
+        }
+        p = p->next;
+    }
+}
+
+bool detectLoop() {
+    Node *slow = first;
+    Node *fast = first;
+
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if (slow == fast)
+            return true;
+    }
+    return false;
+}
+
+Node* findMiddle() {
+    Node *slow = first;
+    Node *fast = first;
+
+    while (fast->next != NULL && fast->next->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+
 int main() {
 
+    // Creating list with duplicates
     insert(first, 0, 10);
     insert(first, 1, 20);
     insert(first, 2, 30);
-    insert(first, 3, 40);
+    insert(first, 3, 20);
+    insert(first, 4, 40);
+    insert(first, 5, 10);
 
-    cout << "Original Playlist: ";
+    cout << "Original List: ";
     display(first);
 
-    cout << "\nReverse Display (without changing list): ";
-    displayReverse(first);
-
-    reverseList();
-
-    cout << "\nReversed Playlist (actual): ";
+    // Task 3
+    removeDuplicates();
+    cout << "\nAfter Removing Duplicates: ";
     display(first);
+
+    // Task 5
+    Node* mid = findMiddle();
+    cout << "\nMiddle Element: " << mid->data;
+
+    // Task 4 (Loop Test)
+    // Manually create loop for testing:
+    // first->next->next->next->next = first->next;
+
+    if (detectLoop())
+        cout << "\nLoop detected!";
+    else
+        cout << "\nNo loop found.";
 
     return 0;
 }
