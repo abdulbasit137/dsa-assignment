@@ -104,6 +104,76 @@ Node* findMiddle() {
     return slow;
 }
 
+//task 6
+void splitEvenOdd(Node* head, Node*& evenHead, Node*& oddHead) {
+    Node *evenTail = NULL, *oddTail = NULL;
+
+    while (head != NULL) {
+        if (head->data % 2 == 0) {
+            // Even
+            if (evenHead == NULL) {
+                evenHead = evenTail = head;
+            } else {
+                evenTail->next = head;
+                evenTail = head;
+            }
+        } else {
+            // Odd
+            if (oddHead == NULL) {
+                oddHead = oddTail = head;
+            } else {
+                oddTail->next = head;
+                oddTail = head;
+            }
+        }
+        head = head->next;
+    }
+
+    // Important: terminate both lists
+    if (evenTail) evenTail->next = NULL;
+    if (oddTail) oddTail->next = NULL;
+}
+
+//task 7
+Node* reverse(Node* head) {
+    Node *prev = NULL, *curr = head, *next = NULL;
+
+    while (curr != NULL) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}
+
+void reverseHalves() {
+    if (first == NULL || first->next == NULL)
+        return;
+
+    Node *slow = first, *fast = first;
+
+    // Find middle (left middle for even)
+    while (fast->next != NULL && fast->next->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    Node *secondHalf = slow->next;
+    slow->next = NULL;  
+
+    Node *firstHalf = reverse(first);
+    secondHalf = reverse(secondHalf);
+
+    first = firstHalf;
+    Node *temp = first;
+
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = secondHalf;
+}
+
 int main() {
 
     // Creating list with duplicates
@@ -134,6 +204,16 @@ int main() {
         cout << "\nLoop detected!";
     else
         cout << "\nNo loop found.";
+
+    Node *evenHead = NULL, *oddHead = NULL;
+
+    splitEvenOdd(first, evenHead, oddHead);
+
+    cout << "\nEven List: ";
+    display(evenHead);
+
+    cout << "\nOdd List: ";
+    display(oddHead);    
 
     return 0;
 }
