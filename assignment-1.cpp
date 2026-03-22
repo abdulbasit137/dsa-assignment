@@ -110,7 +110,7 @@ void splitEvenOdd(Node* head, Node*& evenHead, Node*& oddHead) {
 
     while (head != NULL) {
         if (head->data % 2 == 0) {
-            // Even
+          
             if (evenHead == NULL) {
                 evenHead = evenTail = head;
             } else {
@@ -118,7 +118,7 @@ void splitEvenOdd(Node* head, Node*& evenHead, Node*& oddHead) {
                 evenTail = head;
             }
         } else {
-            // Odd
+          
             if (oddHead == NULL) {
                 oddHead = oddTail = head;
             } else {
@@ -129,7 +129,7 @@ void splitEvenOdd(Node* head, Node*& evenHead, Node*& oddHead) {
         head = head->next;
     }
 
-    // Important: terminate both lists
+    //  terminate both lists
     if (evenTail) evenTail->next = NULL;
     if (oddTail) oddTail->next = NULL;
 }
@@ -174,6 +174,58 @@ void reverseHalves() {
     temp->next = secondHalf;
 }
 
+
+//task 8
+void removeDuplicatesSorted() {
+    Node *p = first;
+
+    while (p != NULL && p->next != NULL) {
+        if (p->data == p->next->data) {
+            Node *dup = p->next;
+            p->next = dup->next;
+            delete dup;
+        } else {
+            p = p->next;
+        }
+    }
+}
+
+
+//task 9
+void deleteAll(int key) {
+    while (first != NULL && first->data == key) {
+        Node *temp = first;
+        first = first->next;
+        delete temp;
+    }
+
+    Node *p = first;
+
+    while (p != NULL && p->next != NULL) {
+        if (p->next->data == key) {
+            Node *temp = p->next;
+            p->next = temp->next;
+            delete temp;
+        } else {
+            p = p->next;
+        }
+    }
+}
+
+
+//task 10
+void pairwiseSwap() {
+    Node *p = first;
+
+    while (p != NULL && p->next != NULL) {
+        int temp = p->data;
+        p->data = p->next->data;
+        p->next->data = temp;
+
+        p = p->next->next;
+    }
+}
+
 int main() {
 
     // Creating list with duplicates
@@ -214,6 +266,16 @@ int main() {
 
     cout << "\nOdd List: ";
     display(oddHead);    
+
+    //task 9 test
+    deleteAll(20);
+    cout << "\nAfter deleting 20: ";
+    display(first);
+
+    //task 10 test
+    pairwiseSwap();
+    cout << "\nAfter pairwise swap: ";
+    display(first);
 
     return 0;
 }
